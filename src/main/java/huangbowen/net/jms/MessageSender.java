@@ -1,8 +1,6 @@
-package huangbowen.net;
+package huangbowen.net.jms;
 
 import org.springframework.jms.core.JmsTemplate;
-
-import java.util.Map;
 
 /**
  * Created by twer on 2/20/14.
@@ -15,7 +13,7 @@ public class MessageSender {
         this.jmsTemplate = jmsTemplate;
     }
 
-    public void send(final Map map) {
-        jmsTemplate.convertAndSend(map);
+    public void send(final String text) {
+        jmsTemplate.convertAndSend(text);
     }
 }

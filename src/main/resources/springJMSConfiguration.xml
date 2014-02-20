@@ -32,7 +32,7 @@
     </bean>
 
     <!-- Message Sender Definition -->
-    <bean id="messageSender" class="huangbowen.net.MessageSender">
+    <bean id="messageSender" class="huangbowen.net.jms.MessageSender">
         <constructor-arg index="0" ref="jmsTemplate"/>
     </bean>
 </beans>

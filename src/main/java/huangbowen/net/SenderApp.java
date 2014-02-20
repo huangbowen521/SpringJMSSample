@@ -9,10 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Hello world!
- *
- */
 public class SenderApp
 {
     public static void main( String[] args ) throws IOException {

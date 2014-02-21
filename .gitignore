@@ -2,3 +2,4 @@ springJMS.ipr
 springJMS.iws
 springJMS.iml
 target/
+activemq-data

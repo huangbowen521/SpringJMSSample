@@ -13,7 +13,6 @@
 
     <!-- Activemq connection factory -->
     <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <!--<constructor-arg index="0" value="${jms.broker.url}"/>-->
         <property name="brokerURL" value="${jms.broker.url}"/>
         <property name="useAsyncSend" value="true"/>
     </bean>
@@ -44,4 +43,14 @@
     <bean id="messageSender" class="huangbowen.net.jms.MessageSender">
         <constructor-arg index="0" ref="jmsTemplate"/>
     </bean>
+
+    <!-- Message Receiver Definition -->
+    <bean id="messageReceiver" class="huangbowen.net.jms.MessageReceiver">
+    </bean>
+    <bean class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destinationName" value="${jms.queue.name}"/>
+        <property name="messageListener" ref="messageReceiver"/>
+    </bean>
+
 </beans>

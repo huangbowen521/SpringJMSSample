@@ -9,10 +9,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class SenderApp
+public class EmbedBrokerApp
 {
     public static void main( String[] args ) throws IOException {
-        start("springJMSConfiguration.xml");
+        start("embedBroker.xml");
     }
 
     public static void start(String configLocation) throws IOException {
@@ -29,7 +29,6 @@ public class SenderApp
 
     public static MessageSender getMessageSender(String configLocation) {
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
-        return (MessageSender) context.getBean("messageSender");
-
+       return (MessageSender) context.getBean("messageSender");
     }
 }

@@ -36,5 +36,10 @@
           <artifactId>spring-core</artifactId>
           <version>4.0.2.RELEASE</version>
       </dependency>
+      <dependency>
+          <groupId>org.apache.xbean</groupId>
+          <artifactId>xbean-spring</artifactId>
+          <version>3.16</version>
+      </dependency>
   </dependencies>
 </project>

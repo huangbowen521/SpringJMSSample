@@ -12,7 +12,7 @@ public class SenderAppTest {
 
     @Test
     public void shouldGetMessageSender() throws Exception {
-        MessageSender messageSender = SenderApp.getMessageSender();
+        MessageSender messageSender = SenderApp.getMessageSender("springJMSConfiguration.xml");
         assertNotNull("MessageSender shouldn't be null.",messageSender);
     }
 }

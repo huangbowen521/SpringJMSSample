@@ -18,8 +18,9 @@ public class SenderApp
     public static void start(String configLocation) throws IOException {
         MessageSender sender = getMessageSender(configLocation);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String text = br.readLine();
 
+        System.out.println("Please input your message:");
+        String text = br.readLine();
         while (!StringUtils.isEmpty(text)) {
             System.out.println(String.format("send message: %s", text));
             sender.send(text);

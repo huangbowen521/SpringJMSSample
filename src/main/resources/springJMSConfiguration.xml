@@ -13,16 +13,9 @@
 
     <!-- Activemq connection factory -->
     <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <!--<constructor-arg index="0" value="${jms.broker.url}"/>-->
-        <property name="brokerURL" value="${jms.broker.url}"/>
+        <constructor-arg index="0" value="${jms.broker.url}"/>
         <property name="useAsyncSend" value="true"/>
     </bean>
-
-    <amq:broker id="activeMQBroker">
-        <amq:transportConnectors>
-            <amq:transportConnector uri="${jms.broker.url}" />
-        </amq:transportConnectors>
-    </amq:broker>
 
     <!-- ConnectionFactory Definition -->
     <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">

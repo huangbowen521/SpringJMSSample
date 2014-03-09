@@ -17,14 +17,12 @@ import java.util.Enumeration;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-/**
- * Created by twer on 3/9/14.
- */
 @ContextConfiguration(locations = {"/retry/activeMQConnection.xml"})
 @DirtiesContext
-public class RetryIntegrationTest extends AbstractJUnit4SpringContextTests {
+public class ReDeliveryFunctionIntegrationTest extends AbstractJUnit4SpringContextTests {
 
 
+    private final static String DLQ = "DLQ.bar";
     @Autowired
     public JmsTemplate jmsTemplate;
 
@@ -32,8 +30,8 @@ public class RetryIntegrationTest extends AbstractJUnit4SpringContextTests {
     public MessageSender messageSender;
 
 
-    private int getMessagesInQueue() {
-        return jmsTemplate.browse("bar", new BrowserCallback<Integer>() {
+    private int getMessagesInDLQ() {
+        return jmsTemplate.browse(DLQ, new BrowserCallback<Integer>() {
             @Override
             public Integer doInJms(Session session, QueueBrowser browser) throws JMSException {
                 Enumeration messages = browser.getEnumeration();
@@ -50,9 +48,12 @@ public class RetryIntegrationTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void shouldRetryIfExceptionHappened() throws Exception {
+
+        assertThat(getMessagesInDLQ(), is(0));
+
         messageSender.send("this is a message");
         Thread.sleep(5000);
 
-        assertThat(getMessagesInQueue(), is(1));
+        assertThat(getMessagesInDLQ(), is(1));
     }
 }

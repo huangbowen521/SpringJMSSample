@@ -7,7 +7,7 @@
 
        http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.8.0.xsd">
 
-    <context:annotation-config />
+    <context:annotation-config/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">
@@ -19,16 +19,29 @@
     <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL" value="${jms.broker.url}?"/>
         <property name="useAsyncSend" value="true"/>
-        <property name="redeliveryPolicy" ref="activeMQRedeliveryPolicy" />
+        <property name="redeliveryPolicy" ref="activeMQRedeliveryPolicy"/>
     </bean>
 
     <amq:broker id="activeMQBroker" persistent="false">
         <amq:transportConnectors>
-            <amq:transportConnector uri="${jms.broker.url}" />
+            <amq:transportConnector uri="${jms.broker.url}"/>
         </amq:transportConnectors>
+        <amq:destinationPolicy>
+            <amq:policyMap>
+                <amq:policyEntries>
+                    <amq:policyEntry queue=">">
+                        <amq:deadLetterStrategy>
+                            <amq:individualDeadLetterStrategy
+                                    queuePrefix="DLQ." useQueueForQueueMessages="true" processExpired="true"
+                                    processNonPersistent="true" />
+                        </amq:deadLetterStrategy>
+                    </amq:policyEntry>
+                </amq:policyEntries>
+            </amq:policyMap>
+        </amq:destinationPolicy>
     </amq:broker>
 
-    <amq:redeliveryPolicy id="activeMQRedeliveryPolicy" destination="#defaultDestination" useExponentialBackOff="true" backOffMultiplier="3" maximumRedeliveries="4" />
+    <amq:redeliveryPolicy id="activeMQRedeliveryPolicy" destination="#defaultDestination"  maximumRedeliveries="4"/>
 
 
     <!-- ConnectionFactory Definition -->
@@ -59,7 +72,7 @@
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="destinationName" value="${jms.queue.name}"/>
         <property name="messageListener" ref="messageReceiver"/>
-        <property name="sessionTransacted" value="true" />
+        <property name="sessionTransacted" value="true"/>
     </bean>
 
 </beans>

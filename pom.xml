@@ -37,6 +37,10 @@
           <version>4.0.2.RELEASE</version>
       </dependency>
       <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-test</artifactId>
+          <version>4.0.2.RELEASE</version>
+      </dependency><dependency>
           <groupId>org.apache.xbean</groupId>
           <artifactId>xbean-spring</artifactId>
           <version>3.16</version>

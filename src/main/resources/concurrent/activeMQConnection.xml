@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:amq="http://activemq.apache.org/schema/core" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+       http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core-5.8.0.xsd">
+
+    <context:annotation-config/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>application.properties</value>
+        </property>
+    </bean>
+
+    <!-- Activemq connection factory -->
+    <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${jms.broker.url}?"/>
+        <property name="useAsyncSend" value="true"/>
+        <property name="redeliveryPolicy" ref="activeMQRedeliveryPolicy"/>
+    </bean>
+
+    <amq:broker id="activeMQBroker" persistent="false">
+        <amq:transportConnectors>
+            <amq:transportConnector uri="${jms.broker.url}"/>
+        </amq:transportConnectors>
+    </amq:broker>
+
+    <amq:redeliveryPolicy id="activeMQRedeliveryPolicy" destination="#defaultDestination"  maximumRedeliveries="4"/>
+
+
+    <!-- ConnectionFactory Definition -->
+    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+        <constructor-arg ref="amqConnectionFactory"/>
+    </bean>
+
+    <!--  Default Destination Queue Definition-->
+    <bean id="defaultDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="${jms.queue.name}"/>
+    </bean>
+
+    <!-- JmsTemplate Definition -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="defaultDestination" ref="defaultDestination"/>
+    </bean>
+
+    <!-- Message Sender Definition -->
+    <bean id="messageSender" class="huangbowen.net.jms.MessageSender">
+        <constructor-arg index="0" ref="jmsTemplate"/>
+    </bean>
+
+    <!-- Message Receiver Definition -->
+    <bean id="messageReceiver" class="huangbowen.net.jms.MessageReceiver">
+    </bean>
+    <bean class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destinationName" value="${jms.queue.name}"/>
+        <property name="messageListener" ref="messageReceiver"/>
+        <property name="concurrency" value="4"/>
+    </bean>
+
+</beans>

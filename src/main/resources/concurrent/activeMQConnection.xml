@@ -59,7 +59,8 @@
         <property name="connectionFactory" ref="connectionFactory"/>
         <property name="destinationName" value="${jms.queue.name}"/>
         <property name="messageListener" ref="messageReceiver"/>
-        <property name="concurrency" value="4"/>
+        <property name="concurrency" value="4-8"/>
+        <!--<property name="concurrentConsumers" value="4"/>-->
     </bean>
 
 </beans>

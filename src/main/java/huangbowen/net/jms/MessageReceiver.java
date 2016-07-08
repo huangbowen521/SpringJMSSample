@@ -12,6 +12,7 @@ public class MessageReceiver implements MessageListener {
                 System.out.println(String.format("Received: %s",text));
                 try {
                     Thread.sleep(100);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
